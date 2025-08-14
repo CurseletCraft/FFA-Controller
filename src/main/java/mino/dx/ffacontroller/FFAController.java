@@ -8,6 +8,7 @@ import mino.dx.ffacontroller.hook.PlaceholderApiHook;
 import mino.dx.ffacontroller.listeners.ChatListener;
 import mino.dx.ffacontroller.listeners.DeathListener;
 import mino.dx.ffacontroller.manager.DeathMessageManager;
+import mino.dx.ffacontroller.utils.ExceptionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,6 +25,9 @@ public final class FFAController extends JavaPlugin {
         registerListeners();
         registerCommands();
         getLogger().info("FFAController has been enabled!");
+
+        ExceptionUtil.throwException("test", new Exception());
+        ExceptionUtil.warningException("test", new Exception());
     }
 
     private void registerListeners() {
