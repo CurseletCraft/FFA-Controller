@@ -1,0 +1,19 @@
+name: FFA-Controller
+version: '${project.version}'
+main: mino.dx.ffacontroller.FFAController
+api-version: '1.21'
+prefix: FFA-Controller
+load: STARTUP
+authors: [ MinoMC_YTB ]
+description: FFA-Controller, by MinoMC_YTB
+website: https://www.youtube.com/channel/UCuiahZeaj3jpkkX93aGmLMw
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    Vault:
+      load: BEFORE
+      required: true
+      join-classpath: true
