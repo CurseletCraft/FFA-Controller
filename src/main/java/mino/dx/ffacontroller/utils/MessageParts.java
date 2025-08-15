@@ -14,14 +14,17 @@ public class MessageParts {
         this.suffix = suffix;
     }
 
+    @SuppressWarnings("unused")
     public String getPrefix() {
         return prefix;
     }
 
+    @SuppressWarnings("unused")
     public String getMiddle() {
         return middle;
     }
 
+    @SuppressWarnings("unused")
     public String getSuffix() {
         return suffix;
     }
