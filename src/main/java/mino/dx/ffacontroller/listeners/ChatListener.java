@@ -3,14 +3,13 @@ package mino.dx.ffacontroller.listeners;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.clip.placeholderapi.PlaceholderAPI;
 import mino.dx.ffacontroller.FFAController;
+import mino.dx.ffacontroller.utils.ColorUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-
-import static mino.dx.ffacontroller.utils.StringUtil.ampersandFormatMessage;
 
 public class ChatListener implements Listener {
 
@@ -40,7 +39,7 @@ public class ChatListener implements Listener {
             PlaceholderAPI.setPlaceholders(player, format);
         }
 
-        sendComponent(ampersandFormatMessage(format));
+        sendComponent(ColorUtil.formatMessage(format));
     }
 
     private void sendComponent(Component message) {

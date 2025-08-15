@@ -1,7 +1,28 @@
+# ================================================
+# ================FFA-Controller==================
+# ================================================
+
+# Đây là config chính gốc của plugin FFA-Controller, có chức năng thêm một số tính năng đặc biệt vào
+# server FFA.
+# Plugin hỗ trợ PlaceholderAPI dùng để hiển thị các chỉ số, các thông tin cơ bản của plugin.
+# Plugin hỗ trợ color code với dấu "§" đằng trước và kể cả Kyori Adventure API. Color code "&" có thể
+# sẽ bị khai tử (deprecated) trong thời gian tới vì có thể xung đột với một số phần tử text.
+
+# Quảng cáo website tài trợ, placeholder là %ffacontroller_website%
 website-ads: "https://gachcloud.net/minomc"
+
+# Có vẻ bạn đang rất cực nhọc khi phải parse ip server liên tục trên nhiều plugin?
+# Chỉ cần viết ip server ở đây, sau đó dùng placeholder %ffacontroller_serverip% và dán cái đó vào trong
+# các config của plugin khác như DecentHolograms, TAB, DeluxeMenu... là giải quyết được vấn đề!
 server-ip: "ʙᴇᴛᴀ.ᴍᴄᴛᴜʀᴛʟᴇ.хʏᴢ"
 
+# ================= DEATH MESSAGES =================
+# Placeholder:
+#   %victim%  → người chết
+#   %killer%  → người giết
+#   %health%  → máu còn lại của killer
 # Bạn có thể thêm nhiều dòng vào đây nếu thích
+# Plugin sẽ chọn ngẫu nhiên 1 trong số các dòng dưới đây để hiện thông báo death khi bị giết bởi ai đó.
 death-messages:
   - "§c%victim% §fđã bị giết bởi §b%killer% §f(§c🤍 %health%§f)"
   - "§c%victim% §fđã bị mukbang bởi §b%killer% §f(§c🤍 %health%§f)"
@@ -22,17 +43,27 @@ death-messages:
   - "§c%victim% §fđã bị hấp sả bởi §b%killer% §f(§c🤍 %health%§f)"
   - "§c%victim% §fđã bị đưa vào cô nhi viện bởi §b%killer% §f(§c🤍 %health%§f)"
 
+# ================= UNKNOWN DEATH MESSAGES =================
+# Placeholder:
+#   %victim%  → người chết
+# Plugin sẽ chọn ngẫu nhiên 1 trong số các dòng dưới đây để hiện thông báo death khi bị chết bởi các nguyên
+# nhân khác ngoại trừ bị giết bởi người chơi khác (ví dụ, té từ trên cao, dùng TNT...)
 unknown-death-messages:
-  - "§c%victim% §fđã chết không rõ nguyên nhân."
   - "§c%victim% §fđã chết không rõ nguyên nhân."
   - "§c%victim% §ftự nhiên lăn đùng ra chết như một cú lag."
   - "§c%victim% §fbiến mất như cú pháp tin nhắn lỗi."
   - "§c%victim% §fđã rời khỏi thế giới này một cách thần bí."
   - "§c%victim% §fbốc hơi như gió mùa không báo trước."
 
+# Discord server link
 discord-link: "https://discord.gg/qFZwhQEz58"
 
-chat-format: "{prefix}{name}&r: {message}"
+# ================= CHAT FORMAT =================
+# {name} {message} → Placeholder nội bộ plugin
+# Có thể dùng <color> hoặc & → Sẽ parse qua cả ampersand và MiniMessage
+chat-format: "%luckperms_prefix%{name}&r: {message}"
+
+# ================= KILLSTREAK =================
 killstreak:
   enable: true
   prefix: "&c&l[Kill Streak] "

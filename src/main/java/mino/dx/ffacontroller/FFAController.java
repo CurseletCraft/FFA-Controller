@@ -25,9 +25,6 @@ public final class FFAController extends JavaPlugin {
         registerListeners();
         registerCommands();
         getLogger().info("FFAController has been enabled!");
-
-        ExceptionUtil.throwException("test", new Exception());
-        ExceptionUtil.warningException("test", new Exception());
     }
 
     private void registerListeners() {
