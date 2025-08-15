@@ -7,8 +7,7 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 public class ColorUtil {
 
     public static Component formatMessage(String message) {
-
-        // Xử lý ký tự & trước
+        // Xử lý ký tự &
         Component comp = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
 
         // Serialize sang MiniMessage format
