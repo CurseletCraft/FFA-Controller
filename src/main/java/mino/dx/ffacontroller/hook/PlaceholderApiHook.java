@@ -30,9 +30,8 @@ public class PlaceholderApiHook extends PlaceholderExpansion {
                 boolean enabled = deathMessageManager.isDeathMessageEnabled(player.getUniqueId());
                 return enabled ? "Bật" : "Tắt";
             case "killstreak": // %ffacontroller_killstreak%
-                // if (player == null || !player.isOnline()) return "0";
-                // return String.valueOf(plugin.getKillStreakManager().getStreak(player.getPlayer()));
-                return "";
+                if (player == null || !player.isOnline()) return "0";
+                return String.valueOf(plugin.getStreakManager().getCurrentStreak(player.getUniqueId()));
             default:
                 return null;
         }
