@@ -1,20 +1,21 @@
 package mino.dx.ffacontroller.controller;
 
+import mino.dx.ffacontroller.FFAController;
+import mino.dx.ffacontroller.api.interfaces.IStreak;
 import mino.dx.ffacontroller.utils.ExceptionUtil;
-import org.bukkit.Bukkit;
 
 import java.io.File;
 import java.sql.*;
 import java.time.Instant;
 import java.util.UUID;
 
-public class KillStreakManager {
+public class KillStreakManager implements IStreak {
 
     private final File databaseFile;
     private Connection connection;
 
-    public KillStreakManager(File dataFolder) {
-        this.databaseFile = new File(dataFolder, "killstreaks.db");
+    public KillStreakManager(FFAController plugin) {
+        this.databaseFile = new File(plugin.getDataFolder(), "killstreaks.db");
         initDatabase();
     }
 
@@ -44,6 +45,7 @@ public class KillStreakManager {
         }
     }
 
+    @Override
     public int getCurrentStreak(UUID uuid) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "SELECT current_streak FROM killstreaks WHERE uuid = ?")) {
@@ -58,6 +60,7 @@ public class KillStreakManager {
         return 0;
     }
 
+    @Override
     public int getBestStreak(UUID uuid) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "SELECT best_streak FROM killstreaks WHERE uuid = ?")) {
@@ -72,19 +75,22 @@ public class KillStreakManager {
         return 0;
     }
 
+    @Override
     public void addKill(UUID uuid) {
         int current = getCurrentStreak(uuid) + 1;
         int best = Math.max(current, getBestStreak(uuid));
         updateStreak(uuid, current, best);
     }
 
+    @Override
     public void resetStreak(UUID uuid) {
         int current = 0;
         int best = getBestStreak(uuid); // giữ nguyên best streak
         updateStreak(uuid, current, best);
     }
 
-    private void updateStreak(UUID uuid, int current, int best) {
+    @Override
+    public void updateStreak(UUID uuid, int current, int best) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO killstreaks (uuid, current_streak, best_streak, last_update) " +
                         "VALUES (?, ?, ?, ?) " +

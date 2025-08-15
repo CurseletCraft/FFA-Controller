@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
 
 public class ChatListener implements Listener {
 
@@ -43,7 +44,7 @@ public class ChatListener implements Listener {
         return isPlaceholderAPIEnabled ? PlaceholderAPI.setPlaceholders(player, message) : message;
     }
 
-    private void sendComponent(Component message) {
+    private void sendComponent(@NotNull Component message) {
         for(Player player : plugin.getServer().getOnlinePlayers()) {
             player.sendMessage(message);
         }

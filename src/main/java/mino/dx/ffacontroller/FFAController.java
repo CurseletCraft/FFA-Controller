@@ -1,39 +1,52 @@
 package mino.dx.ffacontroller;
 
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import mino.dx.ffacontroller.api.interfaces.IStreak;
 import mino.dx.ffacontroller.commands.DiscordCmd;
 import mino.dx.ffacontroller.commands.ReloadCmd;
 import mino.dx.ffacontroller.commands.ToggleDeathMsgCmd;
+import mino.dx.ffacontroller.controller.KillStreakManager;
 import mino.dx.ffacontroller.hook.PlaceholderApiHook;
 import mino.dx.ffacontroller.listeners.ChatListener;
 import mino.dx.ffacontroller.listeners.DeathListener;
+import mino.dx.ffacontroller.listeners.StreakListener;
 import mino.dx.ffacontroller.manager.DeathMessageManager;
-import mino.dx.ffacontroller.utils.ExceptionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FFAController extends JavaPlugin {
 
     private DeathMessageManager deathMessageManager;
+    private IStreak killStreakManager;
 
     @Override
     public void onEnable() {
+
         saveDefaultConfig();
         this.deathMessageManager = new DeathMessageManager(this);
+        this.killStreakManager = new KillStreakManager(this);
 
         Bukkit.getScheduler().runTask(this, () -> new PlaceholderApiHook(this).register());
         registerListeners();
         registerCommands();
-        getLogger().info("FFAController has been enabled!");
+        getLogger().info("FFA-Controller has been enabled!");
+    }
+
+    @Override
+    public void onDisable() {
+        if(killStreakManager != null && killStreakManager instanceof KillStreakManager) {
+            ((KillStreakManager) killStreakManager).close();
+        }
+        getLogger().info("FFA-Controller has been disabled!");
     }
 
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new DeathListener(this), this);
         Bukkit.getPluginManager().registerEvents(new ChatListener(this), this);
 
-//        if(getConfig().getBoolean("killstreak.enable")) {
-//            Bukkit.getPluginManager().registerEvents(new StreakListener(this), this);
-//        }
+        if(getConfig().getBoolean("killstreak.enable")) {
+            Bukkit.getPluginManager().registerEvents(new StreakListener(this), this);
+        }
     }
 
     private void registerCommands() {
@@ -49,5 +62,9 @@ public final class FFAController extends JavaPlugin {
     // Getter
     public DeathMessageManager getDeathMessageManager() {
         return deathMessageManager;
+    }
+
+    public IStreak getStreakManager() {
+        return killStreakManager;
     }
 }
