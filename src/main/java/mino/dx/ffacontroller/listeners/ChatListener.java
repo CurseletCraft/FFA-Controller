@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.jetbrains.annotations.NotNull;
 
 public class ChatListener implements Listener {
 
@@ -22,31 +21,37 @@ public class ChatListener implements Listener {
         this.isPlaceholderAPIEnabled = plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onAsyncChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
         String rawMessage = PlainTextComponentSerializer.plainText().serialize(event.message());
 
-        String format = plugin.getConfig().getString("chat-format", "{name}&r: {message}")
-                .replace("{name}", player.getName())
-                .replace("{message}", rawMessage);
+        String format = plugin.getConfig().getString("chat-format", "{name}: {message}")
+                .replace("{name}", player.getName());
 
         format = setPlaceholders(player, format);
 
+        Component c;
         if(player.hasPermission("ffacontroller.chatcolor")) {
-            sendComponent(Component.text(format)); // Format các kí tự &c thành red color nếu có quyền chatcolor
+            String colored = format.replace("{message}", rawMessage);
+            c = Component.text(colored); // Format các kí tự &c thành red color nếu có quyền chatcolor
         } else {
-            sendComponent(ColorUtil.formatMessage(format));
+            // Không có quyền: giữ nguyên rawMessage, chỉ format phần ngoài
+            String tempFormat = format.replace("{message}", "%msg%"); // chèn placeholder tạm
+            Component outer = ColorUtil.formatMessage(tempFormat.replace("%msg%", "")); // format màu phần ngoài
+
+            // Ghép lại: outer + raw message gốc (không format)
+            // outer lúc này là kiểu Component, cần nối thêm text thô vào chỗ %msg%
+            String outerPlain = PlainTextComponentSerializer.plainText().serialize(outer);
+            outerPlain = outerPlain.replace("%msg%", rawMessage);
+            c = ColorUtil.formatMessage(outerPlain);
         }
+
+        final Component finalC = c;
+        event.renderer((source, sourceDisplayName, message, viewer) -> finalC);
     }
 
     private String setPlaceholders(Player player, String message) {
         return isPlaceholderAPIEnabled ? PlaceholderAPI.setPlaceholders(player, message) : message;
-    }
-
-    private void sendComponent(@NotNull Component message) {
-        for(Player player : plugin.getServer().getOnlinePlayers()) {
-            player.sendMessage(message);
-        }
     }
 }
