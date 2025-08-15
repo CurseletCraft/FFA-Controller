@@ -19,15 +19,18 @@ death-messages:
   - "§c%victim% §fđã bị hoá đá bởi ánh nhìn chí mạng của §b%killer% §f(§c🤍 %health%§f)"
   - "§c%victim% §fbị tiễn đi bởi §b%killer% §ftheo phong cách 'bán hành tận cửa' §f(§c🤍 %health%§f)"
   - "§c%victim% §fđã bị bón hành tập thể bởi §b%killer% §f(§c🤍 %health%§f)"
+  - "§c%victim% §fđã bị hấp sả bởi §b%killer% §f(§c🤍 %health%§f)"
+  - "§c%victim% §fđã bị đưa vào cô nhi viện bởi §b%killer% §f(§c🤍 %health%§f)"
 
 unknown-death-messages:
+  - "§c%victim% §fđã chết không rõ nguyên nhân."
   - "§c%victim% §fđã chết không rõ nguyên nhân."
   - "§c%victim% §ftự nhiên lăn đùng ra chết như một cú lag."
   - "§c%victim% §fbiến mất như cú pháp tin nhắn lỗi."
   - "§c%victim% §fđã rời khỏi thế giới này một cách thần bí."
   - "§c%victim% §fbốc hơi như gió mùa không báo trước."
 
-discord-link: "https://discord.gg/UargGfvtTy"
+discord-link: "https://discord.gg/qFZwhQEz58"
 
 chat-format: "{prefix}{name}&r: {message}"
 killstreak:
