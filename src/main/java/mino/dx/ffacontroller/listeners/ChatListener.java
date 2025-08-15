@@ -31,27 +31,44 @@ public class ChatListener implements Listener {
 
         format = setPlaceholders(player, format);
 
-        Component c;
-        if(player.hasPermission("ffacontroller.chatcolor")) {
-            String colored = format.replace("{message}", rawMessage);
-            c = Component.text(colored); // Format các kí tự &c thành red color nếu có quyền chatcolor
-        } else {
-            // Không có quyền: giữ nguyên rawMessage, chỉ format phần ngoài
-            String tempFormat = format.replace("{message}", "%msg%"); // chèn placeholder tạm
-            Component outer = ColorUtil.formatMessage(tempFormat.replace("%msg%", "")); // format màu phần ngoài
-
-            // Ghép lại: outer + raw message gốc (không format)
-            // outer lúc này là kiểu Component, cần nối thêm text thô vào chỗ %msg%
-            String outerPlain = PlainTextComponentSerializer.plainText().serialize(outer);
-            outerPlain = outerPlain.replace("%msg%", rawMessage);
-            c = ColorUtil.formatMessage(outerPlain);
-        }
-
-        final Component finalC = c;
+        final Component finalC = componentBuilder(player, format, rawMessage);
         event.renderer((source, sourceDisplayName, message, viewer) -> finalC);
     }
 
     private String setPlaceholders(Player player, String message) {
         return isPlaceholderAPIEnabled ? PlaceholderAPI.setPlaceholders(player, message) : message;
+    }
+
+    private Component componentBuilder(Player player, String format, String rawMessage) {
+         if(player.hasPermission("ffacontroller.chatcolor")) {
+             String messageContent = format.replace("{message}", rawMessage);
+             return ColorUtil.formatMessage(messageContent);
+         }
+         else {
+             int msgIndex = format.indexOf("{message}");
+             String prefix = "";
+             String suffix = "";
+
+             if (msgIndex != -1) {
+                 prefix = format.substring(0, msgIndex);
+                 suffix = format.substring(msgIndex + "{message}".length());
+             } else {
+                 // Không tìm thấy {message}, dùng nguyên format làm prefix
+                 prefix = format;
+             }
+
+             // Capitalize nếu có suffix
+             String finalMsg = rawMessage;
+             if (!suffix.isEmpty() && !rawMessage.isEmpty()) {
+                 finalMsg = Character.toUpperCase(rawMessage.charAt(0)) + rawMessage.substring(1);
+             }
+
+             // Format phần ngoài
+             Component outer = ColorUtil.formatMessage(prefix);
+             Component end = ColorUtil.formatMessage(suffix);
+
+             // Ghép: outer + rawMessage (text thường) + suffix
+             return outer.append(Component.text(finalMsg)).append(end);
+         }
     }
 }
