@@ -42,7 +42,7 @@ public class StreakListener implements Listener {
                         .replace("{prefix}", color(plugin.getConfig().getString("killstreak.prefix", "")))
                         .replace("%player%", killer.getName())
                         .replace("%streak%", String.valueOf(newStreak));
-                Bukkit.broadcastMessage(color(msg)); // bị deprecated, sử dụng Bukkit.broadcast(Component) thay vì Bukkit.broadcast(String)
+                // Bukkit.broadcastMessage(color(msg)); // bị deprecated, sử dụng Bukkit.broadcast(Component) thay vì Bukkit.broadcast(String)
                 Bukkit.broadcast(Component.text(color(msg)));
             }
         }
@@ -55,7 +55,8 @@ public class StreakListener implements Listener {
                     .replace("{prefix}", color(plugin.getConfig().getString("killstreak.prefix", "")))
                     .replace("%player%", victim.getName())
                     .replace("%streak%", String.valueOf(victimStreak));
-            Bukkit.broadcastMessage(color(shutdownMsg));
+            // Bukkit.broadcastMessage(color(shutdownMsg));
+            Bukkit.broadcast(Component.text(color(shutdownMsg)));
         }
 
         // Reset streak của victim
