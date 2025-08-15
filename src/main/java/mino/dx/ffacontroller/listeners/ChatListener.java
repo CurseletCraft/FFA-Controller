@@ -4,6 +4,7 @@ import io.papermc.paper.event.player.AsyncChatEvent;
 import me.clip.placeholderapi.PlaceholderAPI;
 import mino.dx.ffacontroller.FFAController;
 import mino.dx.ffacontroller.utils.ColorUtil;
+import mino.dx.ffacontroller.utils.MessageParts;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
@@ -41,34 +42,19 @@ public class ChatListener implements Listener {
 
     private Component componentBuilder(Player player, String format, String rawMessage) {
          if(player.hasPermission("ffacontroller.chatcolor")) {
-             String messageContent = format.replace("{message}", rawMessage);
-             return ColorUtil.formatMessage(messageContent);
+             return ColorUtil.formatMessage(format.replace("{message}", rawMessage));
          }
          else {
-             int msgIndex = format.indexOf("{message}");
-             String prefix = "";
-             String suffix = "";
-
-             if (msgIndex != -1) {
-                 prefix = format.substring(0, msgIndex);
-                 suffix = format.substring(msgIndex + "{message}".length());
-             } else {
-                 // Không tìm thấy {message}, dùng nguyên format làm prefix
-                 prefix = format;
-             }
+             // TODO: bug ở suffix cần sửa lại
+             MessageParts parts = MessageParts.split(format, "{message}");
 
              // Capitalize nếu có suffix
              String finalMsg = rawMessage;
-             if (!suffix.isEmpty() && !rawMessage.isEmpty()) {
+             if (!parts.getSuffix().isEmpty() && !rawMessage.isEmpty()) {
                  finalMsg = Character.toUpperCase(rawMessage.charAt(0)) + rawMessage.substring(1);
              }
 
-             // Format phần ngoài
-             Component outer = ColorUtil.formatMessage(prefix);
-             Component end = ColorUtil.formatMessage(suffix);
-
-             // Ghép: outer + rawMessage (text thường) + suffix
-             return outer.append(Component.text(finalMsg)).append(end);
+             return parts.build(Component.text(finalMsg));
          }
     }
 }

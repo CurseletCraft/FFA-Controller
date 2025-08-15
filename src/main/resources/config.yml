@@ -57,6 +57,8 @@ unknown-death-messages:
 
 # Discord server link
 discord-link: "https://discord.gg/qFZwhQEz58"
+discord-link-message: "&fTham gia link discord tại đây: &b{link}"
+discord-link-action: "Bấm vào đây để mở link"
 
 # ================= CHAT FORMAT =================
 # {name} {message} → Placeholder nội bộ plugin
