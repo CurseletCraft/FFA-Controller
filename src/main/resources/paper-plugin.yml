@@ -17,3 +17,14 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
+
+permissions:
+  ffacontroller.chatcolor:
+    default: op
+    description: "Cho phép người chơi chat màu"
+  ffacontroller.reload:
+    default: op
+    description: "Cho phép người chơi sử dụng lệnh /reload"
+  ffacontroller.toggledeathmsg:
+    default: op
+    description: "Cho phép người chơi sử dụng lệnh /toggledeathmsg"

@@ -16,7 +16,7 @@ public class ReloadCmd {
                         .executes(ctx -> {
                             plugin.reloadConfig();
                             plugin.getDeathMessageManager().reload();
-                            ctx.getSource().getSender().sendMessage("Config reloaded!");
+                            ctx.getSource().getSender().sendMessage("FFA-Controller config reloaded!");
                             return 1;
                         }));
     }

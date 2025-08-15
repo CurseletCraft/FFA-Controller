@@ -23,23 +23,24 @@ public class ChatListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onAsyncChat(AsyncChatEvent event) {
-        Component message = event.message();
-        String rawMessage = PlainTextComponentSerializer.plainText().serialize(message);
-
         Player player = event.getPlayer();
+        String rawMessage = PlainTextComponentSerializer.plainText().serialize(event.message());
 
-        String format = plugin.getConfig().getString("chat-format", "{name}&r: {message}");
-
-        // config: chat-format: "{name}&r: {message}"
-        format = format
+        String format = plugin.getConfig().getString("chat-format", "{name}&r: {message}")
                 .replace("{name}", player.getName())
                 .replace("{message}", rawMessage);
 
-        if(isPlaceholderAPIEnabled) {
-            PlaceholderAPI.setPlaceholders(player, format);
-        }
+        format = setPlaceholders(player, format);
 
-        sendComponent(ColorUtil.formatMessage(format));
+        if(player.hasPermission("ffacontroller.chatcolor")) {
+            sendComponent(Component.text(format)); // Format các kí tự &c thành red color nếu có quyền chatcolor
+        } else {
+            sendComponent(ColorUtil.formatMessage(format));
+        }
+    }
+
+    private String setPlaceholders(Player player, String message) {
+        return isPlaceholderAPIEnabled ? PlaceholderAPI.setPlaceholders(player, message) : message;
     }
 
     private void sendComponent(Component message) {
