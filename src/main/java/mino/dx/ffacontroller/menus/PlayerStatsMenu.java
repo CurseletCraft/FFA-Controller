@@ -1,7 +1,7 @@
 package mino.dx.ffacontroller.menus;
 
-import com.cryptomorin.xseries.XMaterial;
 import mino.dx.ffacontroller.models.PlayerStats;
+import mino.dx.ffacontroller.utils.StringUtil;
 import net.j4c0b3y.api.menu.Menu;
 import net.j4c0b3y.api.menu.MenuSize;
 import net.j4c0b3y.api.menu.button.Button;
@@ -12,10 +12,10 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +26,7 @@ public class PlayerStatsMenu extends Menu {
     private final PlayerStats playerStats;
 
     public PlayerStatsMenu(Player player, OfflinePlayer offlinePlayer, PlayerStats stats) {
-        super("ᴘʟᴀʏᴇʀ ѕᴛᴀᴛѕ", MenuSize.THREE, player);
+        super(StringUtil.toSmallFont(offlinePlayer.getName() + "'s Stats"), MenuSize.THREE, player);
         this.offlinePlayer = offlinePlayer;
         this.playerStats = stats;
     }
@@ -77,6 +77,11 @@ public class PlayerStatsMenu extends Menu {
         public ItemStack getIcon() {
             ItemStack icon = new ItemStack(Material.PLAYER_HEAD);
             ItemMeta meta = icon.getItemMeta();
+
+            if(meta instanceof SkullMeta skullMeta) {
+                skullMeta.setOwningPlayer(offlinePlayer);
+            }
+
             meta.displayName(Component.text(Objects.requireNonNull(offlinePlayer.getName()))
                     .color(NamedTextColor.AQUA)
                     .decorate(TextDecoration.BOLD)
