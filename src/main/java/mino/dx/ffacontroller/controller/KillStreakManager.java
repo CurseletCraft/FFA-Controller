@@ -3,12 +3,15 @@ package mino.dx.ffacontroller.controller;
 import mino.dx.ffacontroller.FFAController;
 import mino.dx.ffacontroller.api.interfaces.IStreak;
 import mino.dx.ffacontroller.utils.ExceptionUtil;
+import org.jetbrains.annotations.ApiStatus.*;
 
 import java.io.File;
 import java.sql.*;
 import java.time.Instant;
 import java.util.UUID;
 
+@NonExtendable
+@AvailableSince("1.2.1")
 public class KillStreakManager implements IStreak {
 
     private final File databaseFile;
