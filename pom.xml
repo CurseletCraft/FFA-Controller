@@ -6,7 +6,7 @@
 
     <groupId>mino.dx</groupId>
     <artifactId>FFA-Controller</artifactId>
-    <version>1.3.1-BETA-3</version>
+    <version>1.3.1-BETA-5</version>
     <packaging>jar</packaging>
 
     <name>FFA-Controller</name>

@@ -74,3 +74,7 @@ killstreak:
   shutdown:
     enable: true
     message: "{prefix} &e%player% đã bị chấm dứt sau chuỗi kill %streak%!"
+
+# ================================================
+join-message: "&a[+] &f%player%"
+leave-message: "&c[-] &f%player%"

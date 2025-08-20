@@ -1,24 +1,51 @@
 package mino.dx.ffacontroller.listeners;
 
-import io.papermc.paper.event.connection.PlayerConnectionValidateLoginEvent;
+// import io.papermc.paper.event.connection.PlayerConnectionValidateLoginEvent;
+import me.clip.placeholderapi.PlaceholderAPI;
+import mino.dx.ffacontroller.FFAController;
+import mino.dx.ffacontroller.utils.StringUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-@SuppressWarnings("all")
+@SuppressWarnings("ClassCanBeRecord")
 public class JoinListener implements Listener {
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {}
+    private final FFAController plugin;
+
+    public JoinListener(FFAController plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
-    public void onLeave(PlayerQuitEvent e) {}
+    public void onJoin(PlayerJoinEvent e) {
+        Player player = e.getPlayer();
+        String rawJoinMessage = plugin.getConfig().getString("join-message", "&a[+] &f%player%");
+        String joinMessage = StringUtil
+                .convertAmpersandToMiniMessage(rawJoinMessage)
+                .replace("%player%", player.getName());
+
+        PlaceholderAPI.setPlaceholders(player, joinMessage);
+
+        Component component = MiniMessage.miniMessage().deserialize(joinMessage);
+        e.joinMessage(component);
+    }
 
     @EventHandler
-    public void onLogin(PlayerLoginEvent e) {}
+    public void onLeave(PlayerQuitEvent e) {
+        Player player = e.getPlayer();
+        String rawLeaveMessage = plugin.getConfig().getString("leave-message", "&c[-] &f%player%");
+        String leaveMessage = StringUtil
+                .convertAmpersandToMiniMessage(rawLeaveMessage)
+                .replace("%player%", player.getName());
 
-    @EventHandler
-    public void onLoginv2(PlayerConnectionValidateLoginEvent e) {}
+        PlaceholderAPI.setPlaceholders(player, leaveMessage);
+
+        Component component = MiniMessage.miniMessage().deserialize(leaveMessage);
+        e.quitMessage(component);
+    }
 }

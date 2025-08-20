@@ -36,13 +36,16 @@ public class PlayerStatsMenu extends Menu {
         bg.border(new PlaceholderButton());
 
         // fg.set(pos x, pos y, class)
+        // x ở đây có thể là từ 0-8, chỉ ra vị trí ô đồ theo hàng ngang từ 1 đến 9
+        // y ở đây có thể là từ 0-5, chỉ ra vị trí ô đồ theo hàng dọc từ 1 đến 6
         fg.set(1, 1, new HeadItem(offlinePlayer));
 
-        fg.set(3,1, new KillsItem(playerStats));
-        fg.set(4,1, new DeathsItem(playerStats));
-        fg.set(5,1, new StreakItem(playerStats));
-        fg.set(6,1, new TimePlayedItem(playerStats));
-        fg.set(7,1, new EloItem(playerStats));
+        fg.set(3,1, new StatsItem(playerStats.getKills(), Material.IRON_SWORD, "Số Kill", NamedTextColor.GREEN, ""));
+        fg.set(4,1, new StatsItem(playerStats.getDeaths(), Material.SKELETON_SKULL, "Số Deaths", NamedTextColor.RED, ""));
+        fg.set(5,1, new StatsItem(playerStats.getStreak(), Material.BLAZE_POWDER, "Streak", NamedTextColor.GOLD, ""));
+        fg.set(6,1, new StatsItem(playerStats.getTimePlayed(), Material.CLOCK, "Thời gian chơi", NamedTextColor.AQUA, ""));
+        fg.set(7,1, new StatsItem(playerStats.getEloContext(), Material.NETHER_STAR, "Elo Ranking", NamedTextColor.LIGHT_PURPLE, "Elo: "));
+
     }
 
     @Override
@@ -92,6 +95,8 @@ public class PlayerStatsMenu extends Menu {
         }
     }
 
+    @Deprecated
+    @SuppressWarnings("unused")
     private static class KillsItem extends Button {
 
         private final String kills;
@@ -116,6 +121,8 @@ public class PlayerStatsMenu extends Menu {
         }
     }
 
+    @Deprecated
+    @SuppressWarnings("unused")
     private static class DeathsItem extends Button {
 
         private final String deaths;
@@ -141,6 +148,8 @@ public class PlayerStatsMenu extends Menu {
         }
     }
 
+    @Deprecated
+    @SuppressWarnings("unused")
     private static class StreakItem extends Button {
 
         private final String streak;
@@ -166,6 +175,8 @@ public class PlayerStatsMenu extends Menu {
         }
     }
 
+    @Deprecated
+    @SuppressWarnings("unused")
     private static class TimePlayedItem extends Button {
 
         private final String timePlayed;
@@ -191,6 +202,8 @@ public class PlayerStatsMenu extends Menu {
         }
     }
 
+    @Deprecated
+    @SuppressWarnings("unused")
     private static class EloItem extends Button {
 
         private final String elo;
@@ -211,6 +224,44 @@ public class PlayerStatsMenu extends Menu {
                     Component.text("Elo: " + elo).color(NamedTextColor.WHITE)
                             .decoration(TextDecoration.ITALIC, false)
             ));
+            icon.setItemMeta(meta);
+            return icon;
+        }
+    }
+
+    // Combine
+    private static class StatsItem extends Button {
+
+        private final String stats;
+        private final Material material;
+        private final String title;
+        private final NamedTextColor color;
+        private final String prefix;
+
+        public StatsItem(String stats, Material material, String title, NamedTextColor color, String prefix) {
+            this.stats = stats;
+            this.material = material;
+            this.title = title;
+            this.color = color;
+            this.prefix = prefix;
+        }
+
+        @Override
+        public ItemStack getIcon() {
+            ItemStack icon = new ItemStack(material);
+            ItemMeta meta = icon.getItemMeta();
+
+            meta.displayName(Component.text(title)
+                    .color(color)
+                    .decorate(TextDecoration.BOLD)
+                    .decoration(TextDecoration.ITALIC, false));
+
+            meta.lore(List.of(
+                    Component.text(prefix + stats)
+                            .color(NamedTextColor.WHITE)
+                            .decoration(TextDecoration.ITALIC, false)
+            ));
+
             icon.setItemMeta(meta);
             return icon;
         }

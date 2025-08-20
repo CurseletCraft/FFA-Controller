@@ -5,9 +5,7 @@ import mino.dx.ffacontroller.api.interfaces.IStreak;
 import mino.dx.ffacontroller.commands.*;
 import mino.dx.ffacontroller.controller.KillStreakManager;
 import mino.dx.ffacontroller.hook.PlaceholderApiHook;
-import mino.dx.ffacontroller.listeners.ChatListener;
-import mino.dx.ffacontroller.listeners.DeathListener;
-import mino.dx.ffacontroller.listeners.StreakListener;
+import mino.dx.ffacontroller.listeners.*;
 import mino.dx.ffacontroller.manager.DeathMessageManager;
 import net.j4c0b3y.api.command.bukkit.BukkitCommandHandler;
 import net.j4c0b3y.api.menu.MenuHandler;
@@ -52,6 +50,7 @@ public final class FFAController extends JavaPlugin {
     private void registerListeners() {
         Bukkit.getPluginManager().registerEvents(new DeathListener(this), this);
         Bukkit.getPluginManager().registerEvents(new ChatListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new JoinListener(this), this);
 
         if(getConfig().getBoolean("killstreak.enable")) {
             Bukkit.getPluginManager().registerEvents(new StreakListener(this), this);
