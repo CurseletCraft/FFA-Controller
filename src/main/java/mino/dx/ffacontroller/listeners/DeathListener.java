@@ -22,11 +22,8 @@ public class DeathListener implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-        // Không rơi kinh nghiệm khi chết
-        e.setDroppedExp(0);
-
-        // Xóa tin nhắn death
-        e.deathMessage(null);
+        e.setDroppedExp(0); // Không rơi kinh nghiệm khi chết
+        e.deathMessage(null); // Xóa tin nhắn death
 
         Player victim = e.getEntity();
         Player killer = victim.getKiller(); // Null nếu không bị giết bởi player

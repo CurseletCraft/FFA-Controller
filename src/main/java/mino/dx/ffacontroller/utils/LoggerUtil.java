@@ -5,10 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
 
-@Deprecated
-public class ExceptionUtil {
-
-    // No cast NullPointerException
+@SuppressWarnings("unused")
+public class LoggerUtil {
     private static final FFAController plugin = JavaPlugin.getPlugin(FFAController.class);
 
     @Deprecated
@@ -39,5 +37,29 @@ public class ExceptionUtil {
     @Deprecated
     public static void warningException(String className, String ctx, Exception e) {
         plugin.getLogger().log(Level.WARNING, className + " " + ctx, e);
+    }
+
+    public static void log(String ctx) {
+        plugin.getLogger().log(Level.INFO, ctx);
+    }
+
+    public static void log(String ctx, Throwable throwable) {
+        plugin.getLogger().log(Level.INFO, ctx, throwable);
+    }
+
+    public static void severe(String ctx) {
+        plugin.getLogger().log(Level.SEVERE, ctx);
+    }
+
+    public static void severe(String ctx, Throwable throwable) {
+        plugin.getLogger().log(Level.SEVERE, ctx, throwable);
+    }
+
+    public static void warning(String ctx) {
+        plugin.getLogger().log(Level.WARNING, ctx);
+    }
+
+    public static void warning(String ctx, Throwable throwable) {
+        plugin.getLogger().log(Level.WARNING, ctx, throwable);
     }
 }

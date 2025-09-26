@@ -68,6 +68,7 @@ chat-format: "%luckperms_prefix%{name}&r: {message}"
 # ================= KILLSTREAK =================
 killstreak:
   enable: true
+  async: false
   prefix: "&c&l[Kill Streak] "
   every_n_kills: 5 # Announce every 5 kills (5, 10, 15, etc.)
   message: "{prefix} &e%player% đang là kẻ hủy diệt! Hắn đang ở chuỗi kill %streak%!"

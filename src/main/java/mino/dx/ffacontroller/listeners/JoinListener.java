@@ -1,6 +1,5 @@
 package mino.dx.ffacontroller.listeners;
 
-// import io.papermc.paper.event.connection.PlayerConnectionValidateLoginEvent;
 import me.clip.placeholderapi.PlaceholderAPI;
 import mino.dx.ffacontroller.FFAController;
 import mino.dx.ffacontroller.utils.StringUtil;

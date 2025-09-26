@@ -6,12 +6,6 @@ import org.bukkit.entity.Player;
 
 public class MessageUtil {
 
-    public static void broadcastMessage(String message) {
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            player.sendMessage(message);
-        }
-    }
-
     public static void broadcastMessage(Component component) {
         for(Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(component);

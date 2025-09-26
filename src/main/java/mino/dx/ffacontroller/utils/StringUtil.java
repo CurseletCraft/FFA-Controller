@@ -81,4 +81,8 @@ public class StringUtil {
                 .replace("&o", "<italic>")
                 .replace("&r", "<reset>");
     }
+
+    public static String reformatCode(String msg) {
+        return msg.replace("&", "§");
+    }
 }

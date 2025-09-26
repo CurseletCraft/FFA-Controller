@@ -54,6 +54,7 @@ public final class FFAController extends JavaPlugin {
 
         if(getConfig().getBoolean("killstreak.enable")) {
             Bukkit.getPluginManager().registerEvents(new StreakListener(this), this);
+            Bukkit.getPluginManager().registerEvents(new StreakNotifierListener(this), this);
         }
     }
 
