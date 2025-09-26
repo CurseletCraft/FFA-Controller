@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Level;
 
+// TODO
+@SuppressWarnings("unused")
 public class ReportManager {
 
     @SuppressWarnings("all")
@@ -49,7 +51,7 @@ public class ReportManager {
             }
 
         } catch (Exception e) {
-            LoggerUtil.throwException(className, "Lỗi khi khởi tạo SQLite", e);
+            LoggerUtil.severex(e, " has error while initializing SQLite");
         }
     }
 
@@ -61,7 +63,7 @@ public class ReportManager {
             stmt.setString(3, reason);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            LoggerUtil.throwException(className, "Error while adding report", e);
+            LoggerUtil.severex(e, " has error while adding report");
         }
     }
 
@@ -71,7 +73,7 @@ public class ReportManager {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            LoggerUtil.throwException(className, "Error while removing report", e);
+            LoggerUtil.severex(e, " has error while removing report");
         }
     }
 
@@ -95,7 +97,7 @@ public class ReportManager {
                 if (rs.next()) return Optional.of(mapResult(rs));
             }
         } catch (SQLException e) {
-            LoggerUtil.throwException(className, "Error while fetching report", e);
+            LoggerUtil.severex(e, " has error while fetching report");
         }
         return Optional.empty();
     }
@@ -109,7 +111,7 @@ public class ReportManager {
                 while (rs.next()) list.add(mapResult(rs));
             }
         } catch (SQLException e) {
-            LoggerUtil.throwException(className, "Error while fetching reports", e);
+            LoggerUtil.severex(e, " has error while fetching reports");
         }
         return list;
     }
@@ -127,7 +129,7 @@ public class ReportManager {
                 }
             }
         } catch (SQLException e) {
-            LoggerUtil.throwException(className, "Error while fetching paged reports by status", e);
+            LoggerUtil.severex(e, " has error while fetching paged reports by status");
         }
         return list;
     }
@@ -139,7 +141,7 @@ public class ReportManager {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) list.add(mapResult(rs));
         } catch (SQLException e) {
-            LoggerUtil.throwException(className, "Error while fetching all reports", e);
+            LoggerUtil.severex(e, " has error while fetching all reports");
         }
         return list;
     }
@@ -156,7 +158,7 @@ public class ReportManager {
                 }
             }
         } catch (SQLException e) {
-            LoggerUtil.throwException(className, "Error while fetching paged reports", e);
+            LoggerUtil.severex(e, " has error while fetching paged reports");
         }
         return list;
     }
@@ -168,7 +170,7 @@ public class ReportManager {
             stmt.setInt(2, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            LoggerUtil.throwException(className, "Error while updating report status", e);
+            LoggerUtil.severex(e, " has error while updating report status");
         }
     }
 

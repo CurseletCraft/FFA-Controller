@@ -46,7 +46,7 @@ public class KillStreakManager implements IStreak {
             }
 
         } catch (Exception e) {
-            LoggerUtil.throwException(this.getClass().getName(), "Lỗi khi khởi tạo SQLite", e);
+            LoggerUtil.severex(e, " has error while initializing SQLite");
         }
     }
 
