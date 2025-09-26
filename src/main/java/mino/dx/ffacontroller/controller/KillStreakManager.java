@@ -2,7 +2,6 @@ package mino.dx.ffacontroller.controller;
 
 import mino.dx.ffacontroller.FFAController;
 import mino.dx.ffacontroller.api.interfaces.IStreak;
-import mino.dx.ffacontroller.utils.ExceptionUtil;
 import mino.dx.ffacontroller.utils.LoggerUtil;
 import org.jetbrains.annotations.ApiStatus.*;
 

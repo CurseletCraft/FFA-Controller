@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
+@SuppressWarnings("unused")
 public interface IStreak {
 
     int getCurrentStreak(UUID uuid);
