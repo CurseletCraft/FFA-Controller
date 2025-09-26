@@ -3,6 +3,7 @@ package mino.dx.ffacontroller.controller;
 import mino.dx.ffacontroller.FFAController;
 import mino.dx.ffacontroller.api.interfaces.IStreak;
 import mino.dx.ffacontroller.utils.ExceptionUtil;
+import mino.dx.ffacontroller.utils.LoggerUtil;
 import org.jetbrains.annotations.ApiStatus.*;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class KillStreakManager implements IStreak {
             }
 
         } catch (Exception e) {
-            ExceptionUtil.throwException(this.getClass().getName(), "Lỗi khi khởi tạo SQLite", e);
+            LoggerUtil.throwException(this.getClass().getName(), "Lỗi khi khởi tạo SQLite", e);
         }
     }
 
@@ -73,7 +74,7 @@ public class KillStreakManager implements IStreak {
                 return rs.getInt("current_streak");
             }
         } catch (SQLException e) {
-            ExceptionUtil.throwException(this.getClass().getName(), e);
+            LoggerUtil.severe(this.getClass().getName(), e);
         }
         return 0;
     }
@@ -87,7 +88,7 @@ public class KillStreakManager implements IStreak {
                 return rs.getInt("best_streak");
             }
         } catch (SQLException e) {
-            ExceptionUtil.throwException(this.getClass().getName(), e);
+            LoggerUtil.severe(this.getClass().getName(), e);
         }
         return 0;
     }
@@ -108,7 +109,7 @@ public class KillStreakManager implements IStreak {
             ps.executeUpdate();
 
         } catch (SQLException e) {
-            ExceptionUtil.throwException(this.getClass().getName(), e);
+            LoggerUtil.severe(this.getClass().getName(), e);
         }
     }
 
@@ -210,7 +211,7 @@ public class KillStreakManager implements IStreak {
             if (connection != null && !connection.isClosed())
                 connection.close();
         } catch (SQLException e) {
-            ExceptionUtil.throwException(this.getClass().getName(), e);
+            LoggerUtil.severe(this.getClass().getName(), e);
         }
     }
 }

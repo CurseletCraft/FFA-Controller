@@ -3,7 +3,7 @@ package mino.dx.ffacontroller.controller;
 import mino.dx.ffacontroller.FFAController;
 import mino.dx.ffacontroller.models.ReportModel;
 import mino.dx.ffacontroller.models.ReportStatus;
-import mino.dx.ffacontroller.utils.ExceptionUtil;
+import mino.dx.ffacontroller.utils.LoggerUtil;
 
 import java.io.File;
 import java.sql.*;
@@ -49,7 +49,7 @@ public class ReportManager {
             }
 
         } catch (Exception e) {
-            ExceptionUtil.throwException(className, "Lỗi khi khởi tạo SQLite", e);
+            LoggerUtil.throwException(className, "Lỗi khi khởi tạo SQLite", e);
         }
     }
 
@@ -61,7 +61,7 @@ public class ReportManager {
             stmt.setString(3, reason);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            ExceptionUtil.throwException(className, "Error while adding report", e);
+            LoggerUtil.throwException(className, "Error while adding report", e);
         }
     }
 
@@ -71,7 +71,7 @@ public class ReportManager {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            ExceptionUtil.throwException(className, "Error while removing report", e);
+            LoggerUtil.throwException(className, "Error while removing report", e);
         }
     }
 
@@ -95,7 +95,7 @@ public class ReportManager {
                 if (rs.next()) return Optional.of(mapResult(rs));
             }
         } catch (SQLException e) {
-            ExceptionUtil.throwException(className, "Error while fetching report", e);
+            LoggerUtil.throwException(className, "Error while fetching report", e);
         }
         return Optional.empty();
     }
@@ -109,7 +109,7 @@ public class ReportManager {
                 while (rs.next()) list.add(mapResult(rs));
             }
         } catch (SQLException e) {
-            ExceptionUtil.throwException(className, "Error while fetching reports", e);
+            LoggerUtil.throwException(className, "Error while fetching reports", e);
         }
         return list;
     }
@@ -127,7 +127,7 @@ public class ReportManager {
                 }
             }
         } catch (SQLException e) {
-            ExceptionUtil.throwException(className, "Error while fetching paged reports by status", e);
+            LoggerUtil.throwException(className, "Error while fetching paged reports by status", e);
         }
         return list;
     }
@@ -139,7 +139,7 @@ public class ReportManager {
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) list.add(mapResult(rs));
         } catch (SQLException e) {
-            ExceptionUtil.throwException(className, "Error while fetching all reports", e);
+            LoggerUtil.throwException(className, "Error while fetching all reports", e);
         }
         return list;
     }
@@ -156,7 +156,7 @@ public class ReportManager {
                 }
             }
         } catch (SQLException e) {
-            ExceptionUtil.throwException(className, "Error while fetching paged reports", e);
+            LoggerUtil.throwException(className, "Error while fetching paged reports", e);
         }
         return list;
     }
@@ -168,7 +168,7 @@ public class ReportManager {
             stmt.setInt(2, id);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            ExceptionUtil.throwException(className, "Error while updating report status", e);
+            LoggerUtil.throwException(className, "Error while updating report status", e);
         }
     }
 
