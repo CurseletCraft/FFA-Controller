@@ -9,13 +9,15 @@ import java.io.File;
 import java.sql.*;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 @NonExtendable
-@AvailableSince("1.2.1")
 public class KillStreakManager implements IStreak {
 
     private final File databaseFile;
     private Connection connection;
+    private final boolean isAsync = false; // TODO: constructor của KillStreakManager nên getConfig
 
     public KillStreakManager(FFAController plugin) {
         this.databaseFile = new File(plugin.getDataFolder(), "killstreaks.db");
@@ -48,8 +50,21 @@ public class KillStreakManager implements IStreak {
         }
     }
 
-    @Override
-    public int getCurrentStreak(UUID uuid) {
+    // ======== Guard methods ========
+    private void requireSync() {
+        if (isAsync) {
+            throw new UnsupportedOperationException("This method can only be used in sync mode.");
+        }
+    }
+
+    private void requireAsync() {
+        if (!isAsync) {
+            throw new UnsupportedOperationException("This method can only be used in async mode.");
+        }
+    }
+
+    // ======== Queries ========
+    private int queryCurrentStreak(UUID uuid) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "SELECT current_streak FROM killstreaks WHERE uuid = ?")) {
             ps.setString(1, uuid.toString());
@@ -63,8 +78,7 @@ public class KillStreakManager implements IStreak {
         return 0;
     }
 
-    @Override
-    public int getBestStreak(UUID uuid) {
+    private int queryBestStreak(UUID uuid) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "SELECT best_streak FROM killstreaks WHERE uuid = ?")) {
             ps.setString(1, uuid.toString());
@@ -78,22 +92,7 @@ public class KillStreakManager implements IStreak {
         return 0;
     }
 
-    @Override
-    public void addKill(UUID uuid) {
-        int current = getCurrentStreak(uuid) + 1;
-        int best = Math.max(current, getBestStreak(uuid));
-        updateStreak(uuid, current, best);
-    }
-
-    @Override
-    public void resetStreak(UUID uuid) {
-        int current = 0;
-        int best = getBestStreak(uuid); // giữ nguyên best streak
-        updateStreak(uuid, current, best);
-    }
-
-    @Override
-    public void updateStreak(UUID uuid, int current, int best) {
+    private void executeUpdateStreak(UUID uuid, int current, int best) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO killstreaks (uuid, current_streak, best_streak, last_update) " +
                         "VALUES (?, ?, ?, ?) " +
@@ -113,6 +112,99 @@ public class KillStreakManager implements IStreak {
         }
     }
 
+    // ======== Sync methods ========
+    @Override
+    public int getCurrentStreak(UUID uuid) {
+        requireSync();
+        return queryCurrentStreak(uuid);
+    }
+
+    @Override
+    public int getBestStreak(UUID uuid) {
+        requireSync();
+        return queryBestStreak(uuid);
+    }
+
+    @Override
+    public void addKill(UUID uuid) {
+        requireSync();
+        int current = queryCurrentStreak(uuid) + 1;
+        int best = Math.max(current, queryBestStreak(uuid));
+        executeUpdateStreak(uuid, current, best);
+    }
+
+    @Override
+    public void resetStreak(UUID uuid) {
+        requireSync();
+        int current = 0;
+        int best = queryBestStreak(uuid); // giữ nguyên best streak
+        executeUpdateStreak(uuid, current, best);
+    }
+
+    @Override
+    public void updateStreak(UUID uuid, int current, int best) {
+        requireSync();
+        executeUpdateStreak(uuid, current, best);
+    }
+
+    // ======== Async methods ========
+    @Override
+    public CompletableFuture<Integer> getCurrentStreakAsync(UUID uuid, Consumer<Throwable> errorHandler) {
+        requireAsync();
+        return CompletableFuture.supplyAsync(() -> queryCurrentStreak(uuid))
+                .exceptionally(ex -> {
+                    errorHandler.accept(ex);
+                    return 0;
+                });
+    }
+
+    @Override
+    public CompletableFuture<Integer> getBestStreakAsync(UUID uuid, Consumer<Throwable> errorHandler) {
+        requireAsync();
+        return CompletableFuture.supplyAsync(() -> queryBestStreak(uuid))
+                .exceptionally(ex -> {
+                    errorHandler.accept(ex);
+                    return 0;
+                });
+    }
+
+    @Override
+    public CompletableFuture<Void> addKillAsync(UUID uuid, Consumer<Throwable> errorHandler) {
+        requireAsync();
+        return CompletableFuture.runAsync(() -> {
+            int current = queryCurrentStreak(uuid) + 1;
+            int best = Math.max(current, queryBestStreak(uuid));
+            executeUpdateStreak(uuid, current, best);
+        }).exceptionally(ex -> {
+            errorHandler.accept(ex);
+            return null;
+        });
+    }
+
+    @Override
+    public CompletableFuture<Void> resetStreakAsync(UUID uuid, Consumer<Throwable> errorHandler) {
+        requireAsync();
+        return CompletableFuture.runAsync(() -> {
+            int current = 0;
+            int best = queryBestStreak(uuid);
+            executeUpdateStreak(uuid, current, best);
+        }).exceptionally(ex -> {
+            errorHandler.accept(ex);
+            return null;
+        });
+    }
+
+    @Override
+    public CompletableFuture<Void> updateStreakAsync(UUID uuid, int current, int best, Consumer<Throwable> errorHandler) {
+        requireAsync();
+        return CompletableFuture.runAsync(() -> executeUpdateStreak(uuid, current, best))
+                .exceptionally(ex -> {
+                    errorHandler.accept(ex);
+                    return null;
+                });
+    }
+
+    // ======== Close ========
     public void close() {
         try {
             if (connection != null && !connection.isClosed())
